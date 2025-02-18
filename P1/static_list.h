@@ -18,7 +18,6 @@ struct list {
  tPosL posl;
  tItemL items[25];
 };
-
 void createEmptyList(tList* l);
 bool isEmptyList(tList l);
 tPosL first(tList l);
@@ -29,5 +28,5 @@ bool insertItem (tItemL i, tPosL pos, tList* l);
 void deleteAtPosition(tPosL pos, tList* l);
 tItemL getItem(tPosL pos,tList l);
 void updateItem(tItemL item, tPosL pos,tList* l);
-tPosL findItem(tConsoleId id,tList l);
+tPosL findItem(tConsoleId *id,tList l);
 #endif
