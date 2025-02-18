@@ -7,14 +7,18 @@
  * DATE: ** / ** / **
  */
 #include "static_list.h"
-
+#include <string.h>
 #include <stdlib.h>
 #define LNULL (-1)
 void createEmptyList(tList *l) {
  l->posl=LNULL;
 }
 bool isEmptyList(tList l) {
- return l.posl==LNULL;
+ if (l.posl==LNULL){
+  return true;
+} else {
+ return false;
+}
 }
 tPosL first(tList l) {
  return 0;
@@ -23,7 +27,7 @@ tPosL last(tList l) {
  return l.posl;
 }
 tPosL next(tPosL pos,tList l) {
- if(pos==last(l)) {
+ if(pos==l.posl) {
   return LNULL;
  } else {
   return pos+1;
@@ -34,25 +38,25 @@ tPosL previous(tPosL pos,tList l) {
  else{return pos-1;}
 }
 bool insertItem (tItemL i, tPosL pos, tList* l) {
- if(24==last(*l)) {//we check if the list has all the spaces used
+ if(last(*l)==24) {//we check if the list has all the spaces used
   return false;
  } else {//we add one extra space to insert the new item
   l->posl++;
   if (pos==LNULL) {
    l->items[last(*l)]=i;
   } else {//we use a loop to change the position of the elements of the list when inserting the new item
-   for(int j=last(*l);j>pos;j--) {
-    l->items[j+1]=l->items[j];
+   for(tPosL j=last(*l);j>pos;j--) {
+    l->items[j]=l->items[j-1];
    }
    l->items[pos]=i;
+   return true;
   }
- return true;
  }
 }
 void deleteAtPosition(tPosL pos, tList* l) {
- for(int i=pos;i<last(*l);i++) {
+ for(tPosL i=pos;i<last(*l);i++) {
   l->items[i]=l->items[i+1];
- }
+ }// we make the list smaller because we deleted one element
  l->posl--;
 }
 tItemL getItem(tPosL pos,tList l) {
@@ -61,10 +65,13 @@ tItemL getItem(tPosL pos,tList l) {
 void updateItem(tItemL item, tPosL pos,tList* l) {
  l->items[pos]=item;
 }
-tPosL findItem(tConsoleId id,tList l) {
- for (int i=0;i<last(l);i++) {
-  if(l.items[i].consoleId==id) {
-   return i;
+tPosL findItem(tConsoleId *id,tList l) {
+ if(isEmptyList(l)) {
+  return LNULL;
+ }
+ for (tPosL pos=0;pos<last(l);pos++) {
+  if(strcmp (l.items[pos].consoleId,id)==0) {
+   return pos;
   }
  }
  return LNULL;
