@@ -13,17 +13,25 @@
 #include "types.h"
 #include <stdbool.h>
 #define LNULL NULL
-typedef int tItemL;
+//typedef int tItemL; (esto lo tengo copiado pero da error así que creo que está mal
 typedef struct tNode *tPosL;
 struct tNode {
   tItemL data;
   tPosL next;
-}
+};
 typedef tPosL tList;
-void CreateEmptyList(tList *L);
-bool CreateNode(tPosL p);
+void createEmptyList(tList *L);
+bool createNode(tPosL p);
 bool insertItem(tItemL d, tPosL p, tList *L);
 bool CopyList(tList L, tList *M);
 bool CopyListR(tList L, tList *M); //This is recursive
-
+void deleteAtPosition(tPosL p, tList *L);
+bool isEmptyList(tList L);
+tPosL last(tList L);
+tPosL first(tList L);
+tPosL previous(tPosL p, tList L);
+void updateItem(tItemL d, tPosL p, tList *L);
+tPosL next(tPosL p, tList L);
+tPosL findItem(tConsoleId d,tList L);
+tItemL getItem(tPosL p, tList L);
 #endif
