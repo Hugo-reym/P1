@@ -12,8 +12,9 @@
 
 #include "types.h"
 #include <stdbool.h>
+
 #define LNULL NULL
-//typedef int tItemL; (esto lo tengo copiado pero da error así que creo que está mal
+//typedef int tItemL;
 typedef struct tNode *tPosL;
 struct tNode {
   tItemL data;
@@ -21,7 +22,6 @@ struct tNode {
 };
 typedef tPosL tList;
 void createEmptyList(tList *L);
-bool createNode(tPosL p);
 bool insertItem(tItemL d, tPosL p, tList *L);
 bool CopyList(tList L, tList *M);
 bool CopyListR(tList L, tList *M); //This is recursive
