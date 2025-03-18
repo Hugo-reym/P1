@@ -22,7 +22,6 @@
 #endif
 
 void addNewConsole(tList *list,tItemL d,char *param1,char *param2,char *param3,char *param4) {
-    tPosL pos;
     char y[9];
     printf(": console %s seller %s brand %s price %s\n",  param1, param2, param3, param4);
 
@@ -60,16 +59,16 @@ void stats(tList list){
             if((char)tmp.consoleBrand == 'n') {
                 strcpy(y, "nintendo");
                 number_nintendo++;
-                sum_prices_nintendo+=pos->data.consolePrice;
+                sum_prices_nintendo+=tmp.consolePrice;
                 average_prices_nintendo=((float)sum_prices_nintendo/(float)number_nintendo);
             }else {
                 strcpy(y, "sega");
                 number_sega++;
-                sum_prices_sega+=pos->data.consolePrice;
+                sum_prices_sega+=tmp.consolePrice;
                 average_prices_sega=((float)sum_prices_sega/(float)number_sega);
             }
 
-            printf("Console %s seller %s brand %s price %.2f bids %d \n",pos->data.consoleId,pos->data.seller,y,pos->data.consolePrice,pos->data.bidCounter);
+            printf("Console %s seller %s brand %s price %.2f bids %d \n",tmp.consoleId,tmp.seller,y,tmp.consolePrice,tmp.bidCounter);
         }
         printf("Brand    Consoles    Price    Average\nNintendo        %d    %.2f    %.2f\n",number_nintendo,sum_prices_nintendo,average_prices_nintendo);
         printf("Sega            %d   %.2f   %.2f\n", number_sega, sum_prices_sega, average_prices_sega);
@@ -78,30 +77,31 @@ void stats(tList list){
 void deleteconsole(tList *list,tConsoleId id) {
     tItemL temp;
     char y[9];
-    temp=getItem(findItem(id,*list),*list);
+
    if(!isEmptyList(*list)) {
+       printf(" console %s\n",id);
        if(findItem(id,*list)==LNULL) {
-           printf("+Error: delete not possible");
+           printf(" + Error: delete not possible\n");
        } else {
-           tItemL d=getItem(findItem(id,*list),*list);
+           temp=getItem(findItem(id,*list),*list);
            deleteAtPosition(findItem(id,*list),list);
            if((char)temp.consoleBrand == 'n') {
                strcpy(y, "nintendo");
            }else {
                strcpy(y, "sega");
            }
-           printf("Delete: console %s seller %s brand %s price %f bids %d",temp.consoleId,temp.seller,y,temp.consolePrice,temp.bidCounter);
+           printf("Delete: console %s seller %s brand %s price %.2f bids %d\n",temp.consoleId,temp.seller,y,temp.consolePrice,temp.bidCounter);
        }
    } else {
        printf("+Error: delete not possible");
    }
 }
 void bid(tList *list,tConsoleId console,tUserId seller,tConsolePrice price) {
-    tItemL temp;
     char y[9];
-    temp=getItem(findItem(console,*list),*list);
+    tItemL temp = getItem(findItem(console, *list), *list);
+    printf(" console %s bidder %s price %.2f\n",console,seller,price);
     if(findItem(console,*list)==LNULL || price<=temp.consolePrice || (strcmp(seller,temp.seller)==0)) {
-        printf("+Error: bid not possible");
+        printf(" + Error: bid not possible\n");
     }else {
         if((char)temp.consoleBrand == 'n') {
             strcpy(y, "nintendo");
@@ -110,13 +110,12 @@ void bid(tList *list,tConsoleId console,tUserId seller,tConsolePrice price) {
         }
         temp.bidCounter++;
         temp.consolePrice=price;
-        printf("*Bid: console %s seller %s brand %s price %f bids %d",temp.consoleId,temp.seller,y,temp.consolePrice,temp.bidCounter);
+        updateItem(temp,findItem(console,*list),list);
+        printf(" * Bid: console %s seller %s brand %s price %.2f bids %d\n",temp.consoleId,temp.seller,y,temp.consolePrice,temp.bidCounter);
     }
 }
 void processCommand(char *commandNumber, char command, char *param1, char *param2, char *param3, char *param4, tList *list) {
     tItemL d;
-    char y[9];
-    tPosL pos;
     printf("********************\n %s %c", commandNumber, command);
     switch (command) {
         case 'N':
@@ -126,7 +125,7 @@ void processCommand(char *commandNumber, char command, char *param1, char *param
             deleteconsole(list,param1);
             break;
         case 'B':
-            bid(list,param1,param2,*param4);
+            bid(list,param1,param2,atof(param3));
             break;
         case 'S':printf("\n");
         stats(*list);
@@ -183,8 +182,3 @@ int main(int nargs, char **args) {
 
     return 0;
 }
-
-
-
-
-
